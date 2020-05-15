@@ -58,8 +58,12 @@ import java.util.Date;
  */
 public class MainFrame extends JFrame {
 
+    private ChessBoardContent chessBoardContent;
     private ChessBoardForHumans chessBoardForHumans;
     private ChessBoardForHumanVersusMachine chessBoardForHumanVersusMachine;
+    private String option;
+    private String option1 = "玩家对战";
+    private String option2 = "人机对战";
 
     private JToolBar jToolBar;
     private JButton restartButton, retractButton, escapeButton;
@@ -85,7 +89,7 @@ public class MainFrame extends JFrame {
         setTitle("n子棋");
 
         // 选择棋盘
-        Object[] options = {"玩家对战", "人机对战"};
+        Object[] options = {option1, option2};
         int choiceInt = JOptionPane.showOptionDialog(null, "请选择对战方式", "选择",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
@@ -94,12 +98,16 @@ public class MainFrame extends JFrame {
         // 放置棋盘
         switch (choiceInt) {
             case JOptionPane.YES_OPTION :
-                chessBoardForHumans = ChessBoardForHumans.getInstance();
+                option = option1;
+                chessBoardContent = new ChessBoardContent(ChessBoardForHumans.getInstance());
+                chessBoardForHumans = (ChessBoardForHumans)chessBoardContent.getChessBoard();
                 contentPane.add(chessBoardForHumans);
                 chessBoardForHumans.setOpaque(true);
                 break;
             case JOptionPane.NO_OPTION :
-                chessBoardForHumanVersusMachine = ChessBoardForHumanVersusMachine.getInstance();
+                option = option2;
+                chessBoardContent = new ChessBoardContent(ChessBoardForHumanVersusMachine.getInstance());
+                chessBoardForHumanVersusMachine = (ChessBoardForHumanVersusMachine)chessBoardContent.getChessBoard();
                 contentPane.add(chessBoardForHumanVersusMachine);
                 chessBoardForHumanVersusMachine.setOpaque(true);
                 break;
@@ -220,9 +228,17 @@ public class MainFrame extends JFrame {
             // 设置默认获胜所需棋子数量，默认值为5
             String number = JOptionPane.showInputDialog("获胜所需棋子数");
             if (number == null || number.equals("")) {
-                ChessBoard.setChessNumberRequiredToWin(5);
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setChessNumberRequiredToWin(5);
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setChessNumberRequiredToWin(5);
+                }
             } else {
-                ChessBoard.setChessNumberRequiredToWin(Integer.parseInt(number));
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setChessNumberRequiredToWin(Integer.parseInt(number));
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setChessNumberRequiredToWin(Integer.parseInt(number));
+                }
             }
         });
         settingSizeItem.addActionListener(event -> {
@@ -232,16 +248,32 @@ public class MainFrame extends JFrame {
             // 设置棋盘的行数，默认值为15
             String rowString = JOptionPane.showInputDialog("棋盘行数");
             if (rowString == null || rowString.equals("")) {
-                ChessBoard.setRow(15);
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setRow(15);
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setRow(15);
+                }
             } else {
-                ChessBoard.setRow(Integer.parseInt(rowString));
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setRow(Integer.parseInt(rowString));
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setRow(Integer.parseInt(rowString));
+                }
             }
             // 设置棋盘的列数，默认值为15
             String columnString = JOptionPane.showInputDialog("棋盘列数");
             if (columnString == null || columnString.equals("")) {
-                ChessBoard.setColumn(15);
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setColumn(15);
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setColumn(15);
+                }
             } else {
-                ChessBoard.setColumn(Integer.parseInt(columnString));
+                if (option.equals(option1)) {
+                    chessBoardForHumans.setColumn(Integer.parseInt(columnString));
+                } else if (option.equals(option2)) {
+                    chessBoardForHumanVersusMachine.setColumn(Integer.parseInt(columnString));
+                }
             }
 
             // 自适应界面大小以适应新棋盘大小
